@@ -1,12 +1,21 @@
-// Una descripción de lo que hace el contrato.
+# KIPU BANK
 
-// Instrucciones de despliegue.
+Smart contract para realizar depósitos y retiros de ETH con límites por transacción y capacidad total del banco.
 
-// Cómo interactuar con el contrato.
+## Funcionalidades del SC
 
-# KIPU BANK 
+- El contrato permite realizar depósitos de ETH.
+- Cuenta con eventos y errores personalizados.
+- El SC tiene retiros limitados por transacción (seteado en _withdrawLimit).
+- El banco tiene un límite global (seteado en _bankCap).
 
-Este contrato forma parte del TP2 del EDP
+## Cómo interactuar con el contrato
+
+Para interactuar con el contrato se debe utilizar la función de depósito `deposit()` en caso de querer depositar.
+En caso de querer retirar los fondos (siempre por debajo del límite seteado) se utilizará la función retirar `withdraw()`
+
+
+Nota: Este contrato forma parte del TP2 del EDP
 
 ## Enunciado:
 
@@ -41,4 +50,3 @@ Tu tarea es recrear el contrato inteligente KipuBank con funcionalidad completa 
 - Mantener las variables de estado limpias, legibles y bien comentadas.
 - Agregar comentarios NatSpec para cada función, error y variable de estado.
 - Aplicar convenciones de nombres adecuadas.
-
