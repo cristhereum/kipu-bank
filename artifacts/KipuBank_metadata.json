@@ -1,0 +1,296 @@
+{
+	"compiler": {
+		"version": "0.8.30+commit.73712a01"
+	},
+	"language": "Solidity",
+	"output": {
+		"abi": [
+			{
+				"inputs": [
+					{
+						"internalType": "uint256",
+						"name": "_withdrawLimit",
+						"type": "uint256"
+					},
+					{
+						"internalType": "uint256",
+						"name": "_bankCap",
+						"type": "uint256"
+					}
+				],
+				"stateMutability": "nonpayable",
+				"type": "constructor"
+			},
+			{
+				"inputs": [
+					{
+						"internalType": "uint256",
+						"name": "attempted",
+						"type": "uint256"
+					},
+					{
+						"internalType": "uint256",
+						"name": "remaining",
+						"type": "uint256"
+					}
+				],
+				"name": "BankCapExceeded",
+				"type": "error"
+			},
+			{
+				"inputs": [
+					{
+						"internalType": "uint256",
+						"name": "requested",
+						"type": "uint256"
+					},
+					{
+						"internalType": "uint256",
+						"name": "max",
+						"type": "uint256"
+					}
+				],
+				"name": "ExceedsPerTxWithdrawLimit",
+				"type": "error"
+			},
+			{
+				"inputs": [
+					{
+						"internalType": "uint256",
+						"name": "available",
+						"type": "uint256"
+					},
+					{
+						"internalType": "uint256",
+						"name": "requested",
+						"type": "uint256"
+					}
+				],
+				"name": "InsufficientBalance",
+				"type": "error"
+			},
+			{
+				"inputs": [],
+				"name": "ZeroDeposit",
+				"type": "error"
+			},
+			{
+				"inputs": [],
+				"name": "ZeroWithdraw",
+				"type": "error"
+			},
+			{
+				"anonymous": false,
+				"inputs": [
+					{
+						"indexed": true,
+						"internalType": "address",
+						"name": "user",
+						"type": "address"
+					},
+					{
+						"indexed": false,
+						"internalType": "uint256",
+						"name": "amount",
+						"type": "uint256"
+					}
+				],
+				"name": "Deposited",
+				"type": "event"
+			},
+			{
+				"anonymous": false,
+				"inputs": [
+					{
+						"indexed": true,
+						"internalType": "address",
+						"name": "user",
+						"type": "address"
+					},
+					{
+						"indexed": false,
+						"internalType": "uint256",
+						"name": "amount",
+						"type": "uint256"
+					}
+				],
+				"name": "Withdrawn",
+				"type": "event"
+			},
+			{
+				"inputs": [],
+				"name": "bankCap",
+				"outputs": [
+					{
+						"internalType": "uint256",
+						"name": "",
+						"type": "uint256"
+					}
+				],
+				"stateMutability": "view",
+				"type": "function"
+			},
+			{
+				"inputs": [],
+				"name": "deposit",
+				"outputs": [],
+				"stateMutability": "payable",
+				"type": "function"
+			},
+			{
+				"inputs": [],
+				"name": "depositCount",
+				"outputs": [
+					{
+						"internalType": "uint256",
+						"name": "",
+						"type": "uint256"
+					}
+				],
+				"stateMutability": "view",
+				"type": "function"
+			},
+			{
+				"inputs": [],
+				"name": "getMyBalance",
+				"outputs": [
+					{
+						"internalType": "uint256",
+						"name": "balance",
+						"type": "uint256"
+					}
+				],
+				"stateMutability": "view",
+				"type": "function"
+			},
+			{
+				"inputs": [
+					{
+						"internalType": "uint256",
+						"name": "amount",
+						"type": "uint256"
+					}
+				],
+				"name": "withdraw",
+				"outputs": [],
+				"stateMutability": "nonpayable",
+				"type": "function"
+			},
+			{
+				"inputs": [],
+				"name": "withdrawCount",
+				"outputs": [
+					{
+						"internalType": "uint256",
+						"name": "",
+						"type": "uint256"
+					}
+				],
+				"stateMutability": "view",
+				"type": "function"
+			},
+			{
+				"inputs": [],
+				"name": "withdrawLimit",
+				"outputs": [
+					{
+						"internalType": "uint256",
+						"name": "",
+						"type": "uint256"
+					}
+				],
+				"stateMutability": "view",
+				"type": "function"
+			}
+		],
+		"devdoc": {
+			"author": "cristhereum",
+			"details": "Sigue patrones de seguridad de Solidity como CEI, errores personalizados y más.",
+			"kind": "dev",
+			"methods": {
+				"constructor": {
+					"params": {
+						"_bankCap": "Capacidad total de depósitos del banco",
+						"_withdrawLimit": "Máximo que se puede retirar por transacción"
+					}
+				},
+				"deposit()": {
+					"custom:error": "ZeroDeposit, BankCapExceeded",
+					"details": "Sigue el patrón checks-effects-interactions"
+				},
+				"getMyBalance()": {
+					"returns": {
+						"balance": "ETH disponible del usuario"
+					}
+				},
+				"withdraw(uint256)": {
+					"custom:error": "ExceedsPerTxWithdrawLimit, InsufficientBalance, ZeroWithdraw",
+					"params": {
+						"amount": "Cantidad a retirar"
+					}
+				}
+			},
+			"title": "KipuBank - Bóveda personal con límites de retiro y depósito.",
+			"version": 1
+		},
+		"userdoc": {
+			"events": {
+				"Deposited(address,uint256)": {
+					"notice": "Se emite cuando un usuario deposita ETH"
+				},
+				"Withdrawn(address,uint256)": {
+					"notice": "Se emite cuando un usuario retira ETH"
+				}
+			},
+			"kind": "user",
+			"methods": {
+				"bankCap()": {
+					"notice": "Capacidad máxima total del banco"
+				},
+				"deposit()": {
+					"notice": "Deposita ETH al banco"
+				},
+				"depositCount()": {
+					"notice": "Conteo de depósitos y retiros"
+				},
+				"getMyBalance()": {
+					"notice": "Consulta el balance actual del usuario"
+				},
+				"withdraw(uint256)": {
+					"notice": "Retira una cantidad de ETH de la bóveda del usuario"
+				},
+				"withdrawLimit()": {
+					"notice": "Límite máximo de retiro por transacción"
+				}
+			},
+			"notice": "Permite a los usuarios depositar y retirar ETH con límites establecidos.",
+			"version": 1
+		}
+	},
+	"settings": {
+		"compilationTarget": {
+			"contracts/KipuBank.sol": "KipuBank"
+		},
+		"evmVersion": "prague",
+		"libraries": {},
+		"metadata": {
+			"bytecodeHash": "ipfs"
+		},
+		"optimizer": {
+			"enabled": false,
+			"runs": 200
+		},
+		"remappings": []
+	},
+	"sources": {
+		"contracts/KipuBank.sol": {
+			"keccak256": "0x399164090ee69913e4671dd7f0d30fa111d7bfd6c1c25f60a90a2678fd2f50b7",
+			"license": "MIT",
+			"urls": [
+				"bzz-raw://c73dd11a14c05c331344dea3cd34bc45ef231259827ad9bad531c3f38050e93d",
+				"dweb:/ipfs/QmQeyBtAtvtinVucvaXxqWGiEYzyrExJYn7WTww3E8XKwN"
+			]
+		}
+	},
+	"version": 1
+}
