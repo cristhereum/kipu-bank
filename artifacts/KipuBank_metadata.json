@@ -9,7 +9,7 @@
 				"inputs": [
 					{
 						"internalType": "uint256",
-						"name": "_withdrawLimit",
+						"name": "_umbralRetiros",
 						"type": "uint256"
 					},
 					{
@@ -24,59 +24,33 @@
 			{
 				"inputs": [
 					{
-						"internalType": "uint256",
-						"name": "attempted",
-						"type": "uint256"
-					},
-					{
-						"internalType": "uint256",
-						"name": "remaining",
-						"type": "uint256"
+						"internalType": "bytes",
+						"name": "motivo",
+						"type": "bytes"
 					}
 				],
-				"name": "BankCapExceeded",
+				"name": "BalanceInsuficiente",
+				"type": "error"
+			},
+			{
+				"inputs": [],
+				"name": "BancoLleno",
+				"type": "error"
+			},
+			{
+				"inputs": [],
+				"name": "InvalidValue",
 				"type": "error"
 			},
 			{
 				"inputs": [
 					{
-						"internalType": "uint256",
-						"name": "requested",
-						"type": "uint256"
-					},
-					{
-						"internalType": "uint256",
-						"name": "max",
-						"type": "uint256"
+						"internalType": "bytes",
+						"name": "motivo",
+						"type": "bytes"
 					}
 				],
-				"name": "ExceedsPerTxWithdrawLimit",
-				"type": "error"
-			},
-			{
-				"inputs": [
-					{
-						"internalType": "uint256",
-						"name": "available",
-						"type": "uint256"
-					},
-					{
-						"internalType": "uint256",
-						"name": "requested",
-						"type": "uint256"
-					}
-				],
-				"name": "InsufficientBalance",
-				"type": "error"
-			},
-			{
-				"inputs": [],
-				"name": "ZeroDeposit",
-				"type": "error"
-			},
-			{
-				"inputs": [],
-				"name": "ZeroWithdraw",
+				"name": "RetiroInvalido",
 				"type": "error"
 			},
 			{
@@ -85,17 +59,17 @@
 					{
 						"indexed": true,
 						"internalType": "address",
-						"name": "user",
+						"name": "desde",
 						"type": "address"
 					},
 					{
 						"indexed": false,
 						"internalType": "uint256",
-						"name": "amount",
+						"name": "cantidad",
 						"type": "uint256"
 					}
 				],
-				"name": "Deposited",
+				"name": "DepositoExitoso",
 				"type": "event"
 			},
 			{
@@ -104,18 +78,37 @@
 					{
 						"indexed": true,
 						"internalType": "address",
-						"name": "user",
+						"name": "desde",
 						"type": "address"
 					},
 					{
 						"indexed": false,
 						"internalType": "uint256",
-						"name": "amount",
+						"name": "cantidad",
 						"type": "uint256"
 					}
 				],
-				"name": "Withdrawn",
+				"name": "RetiroExitoso",
 				"type": "event"
+			},
+			{
+				"inputs": [
+					{
+						"internalType": "address",
+						"name": "",
+						"type": "address"
+					}
+				],
+				"name": "balance",
+				"outputs": [
+					{
+						"internalType": "uint256",
+						"name": "",
+						"type": "uint256"
+					}
+				],
+				"stateMutability": "view",
+				"type": "function"
 			},
 			{
 				"inputs": [],
@@ -132,14 +125,7 @@
 			},
 			{
 				"inputs": [],
-				"name": "deposit",
-				"outputs": [],
-				"stateMutability": "payable",
-				"type": "function"
-			},
-			{
-				"inputs": [],
-				"name": "depositCount",
+				"name": "conteoDeposito",
 				"outputs": [
 					{
 						"internalType": "uint256",
@@ -152,33 +138,40 @@
 			},
 			{
 				"inputs": [],
-				"name": "getMyBalance",
+				"name": "conteoRetiro",
 				"outputs": [
 					{
 						"internalType": "uint256",
-						"name": "balance",
+						"name": "",
 						"type": "uint256"
 					}
 				],
 				"stateMutability": "view",
+				"type": "function"
+			},
+			{
+				"inputs": [],
+				"name": "depositar",
+				"outputs": [],
+				"stateMutability": "payable",
 				"type": "function"
 			},
 			{
 				"inputs": [
 					{
 						"internalType": "uint256",
-						"name": "amount",
+						"name": "cantidad",
 						"type": "uint256"
 					}
 				],
-				"name": "withdraw",
+				"name": "retirar",
 				"outputs": [],
 				"stateMutability": "nonpayable",
 				"type": "function"
 			},
 			{
 				"inputs": [],
-				"name": "withdrawCount",
+				"name": "totalBanco",
 				"outputs": [
 					{
 						"internalType": "uint256",
@@ -191,7 +184,20 @@
 			},
 			{
 				"inputs": [],
-				"name": "withdrawLimit",
+				"name": "totalDepositado",
+				"outputs": [
+					{
+						"internalType": "uint256",
+						"name": "",
+						"type": "uint256"
+					}
+				],
+				"stateMutability": "view",
+				"type": "function"
+			},
+			{
+				"inputs": [],
+				"name": "umbralRetiros",
 				"outputs": [
 					{
 						"internalType": "uint256",
@@ -204,72 +210,19 @@
 			}
 		],
 		"devdoc": {
-			"author": "cristhereum",
-			"details": "Sigue patrones de seguridad de Solidity como CEI, errores personalizados y más.",
 			"kind": "dev",
-			"methods": {
-				"constructor": {
-					"params": {
-						"_bankCap": "Capacidad total de depósitos del banco",
-						"_withdrawLimit": "Máximo que se puede retirar por transacción"
-					}
-				},
-				"deposit()": {
-					"custom:error": "ZeroDeposit, BankCapExceeded",
-					"details": "Sigue el patrón checks-effects-interactions"
-				},
-				"getMyBalance()": {
-					"returns": {
-						"balance": "ETH disponible del usuario"
-					}
-				},
-				"withdraw(uint256)": {
-					"custom:error": "ExceedsPerTxWithdrawLimit, InsufficientBalance, ZeroWithdraw",
-					"params": {
-						"amount": "Cantidad a retirar"
-					}
-				}
-			},
-			"title": "KipuBank - Bóveda personal con límites de retiro y depósito.",
+			"methods": {},
 			"version": 1
 		},
 		"userdoc": {
-			"events": {
-				"Deposited(address,uint256)": {
-					"notice": "Se emite cuando un usuario deposita ETH"
-				},
-				"Withdrawn(address,uint256)": {
-					"notice": "Se emite cuando un usuario retira ETH"
-				}
-			},
 			"kind": "user",
-			"methods": {
-				"bankCap()": {
-					"notice": "Capacidad máxima total del banco"
-				},
-				"deposit()": {
-					"notice": "Deposita ETH al banco"
-				},
-				"depositCount()": {
-					"notice": "Conteo de depósitos y retiros"
-				},
-				"getMyBalance()": {
-					"notice": "Consulta el balance actual del usuario"
-				},
-				"withdraw(uint256)": {
-					"notice": "Retira una cantidad de ETH de la bóveda del usuario"
-				},
-				"withdrawLimit()": {
-					"notice": "Límite máximo de retiro por transacción"
-				}
-			},
-			"notice": "Permite a los usuarios depositar y retirar ETH con límites establecidos.",
+			"methods": {},
 			"version": 1
 		}
 	},
 	"settings": {
 		"compilationTarget": {
-			"contracts/KipuBank.sol": "KipuBank"
+			"contracts/test.sol": "KipuBank"
 		},
 		"evmVersion": "prague",
 		"libraries": {},
@@ -283,12 +236,12 @@
 		"remappings": []
 	},
 	"sources": {
-		"contracts/KipuBank.sol": {
-			"keccak256": "0x399164090ee69913e4671dd7f0d30fa111d7bfd6c1c25f60a90a2678fd2f50b7",
+		"contracts/test.sol": {
+			"keccak256": "0xa334db089c8ffceb4c4e8ae622857710c97995e1301bcd40424ef2e19a667d5f",
 			"license": "MIT",
 			"urls": [
-				"bzz-raw://c73dd11a14c05c331344dea3cd34bc45ef231259827ad9bad531c3f38050e93d",
-				"dweb:/ipfs/QmQeyBtAtvtinVucvaXxqWGiEYzyrExJYn7WTww3E8XKwN"
+				"bzz-raw://704d4b6c787af0bfcdcc1f983ed004ca117dc123c02e879c30fa1b9d8d8f6342",
+				"dweb:/ipfs/QmeVkw3wCQWYTCh9q4VN3PkwmJE1Z3CFuUrpbzB21QMT3C"
 			]
 		}
 	},
