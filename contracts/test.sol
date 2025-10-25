@@ -5,7 +5,7 @@ pragma solidity > 0.8.7;
  * @title KipuBank
  * @author cristhereum
  * @notice Este contrato es parte del primer proyecto del Ethereum Developer Pack 
- * @custom:security Este es un contrato educativo y no debe ser usado en producción
+ * @custom:security Este es un contrato educativo y no debe ser usado en producción.
 */ 
 
 
